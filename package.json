@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/olivier-goy/Mon-vieux-grimoire/issues"
   },
-  "homepage": "https://github.com/olivier-goy/Mon-vieux-grimoire#readme"
+  "homepage": "https://github.com/olivier-goy/Mon-vieux-grimoire#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
