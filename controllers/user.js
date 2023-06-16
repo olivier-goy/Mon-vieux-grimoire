@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
       });
       user
         .save()
-        .then(() => res.status(200).json("Utilisateur créer !"))
+        .then(() => res.status(200).json({message: "Utilisateur créer !"}))
         .catch((error) => res.status(400).json(error));
     })
     .catch((error) => res.status(500).json(error));
@@ -37,9 +37,11 @@ exports.login = (req, res, next) => {
             } else {
               res.status(200).json({
                 userId: user._id,
-                token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
-                  expiresIn: "24H",
-                }),
+                token: jwt.sign(
+                  { userId: user._id },
+                  "RANDOM_TOKEN_SECRET",
+                  { expiresIn: "24H" }
+                ),
               });
             }
           })
