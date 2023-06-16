@@ -31,6 +31,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", userRoute);
-app.use("/api/book", bookRoutes);
+app.use("/api/books", bookRoutes);
 
 module.exports = app;
