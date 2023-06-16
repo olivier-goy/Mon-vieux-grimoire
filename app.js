@@ -1,16 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-const app = express();
+const bookRoutes = require("./routes/book");
 
 mongoose.connect("mongodb+srv://Olivier:Olivier.@atlascluster.2c8xmmi.mongodb.net/?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => console.log("Connexion à MongoDB réussi !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}
+)
+.then(() => console.log("Connexion à MongoDB réussi !"))
+.catch(() => console.log("Connexion à MongoDB échouée !"));
+
+const app = express();
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,5 +26,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use("/api/book", bookRoutes);
 
 module.exports = app;
