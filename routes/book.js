@@ -6,6 +6,7 @@ const bookCtrl = require("../controllers/book");
 
 router.post('/', auth, multer, bookCtrl.creatingBook);
 router.delete('/:id', auth, bookCtrl.deleteBook);
+router.get('/bestrating', bookCtrl.getBestBooks);
 router.get('/:id', bookCtrl.getOneBook);
 router.get('/', bookCtrl.getAllBooks);
 
