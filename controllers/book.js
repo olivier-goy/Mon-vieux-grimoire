@@ -25,7 +25,6 @@ exports.modifyBook = (req, res, next) => {
           req.file.filename
         }`,
       } : { ...req.body };
-
   delete bookObject._userId;
   Book.findOne({ _id: req.params.id })
     .then((book) => {
