@@ -37,8 +37,8 @@ exports.deleteBook = (req, res, next) => {
 
 exports.getBestBooks = (req, res, next) => { 
   Book.find()
-  .then((books) => res.status(200).json(books))
-  .catch((error) => res.status(400).json({ error }));
+    .then((books) => res.status(200).json([...books].sort((a, b) => b.averageRating - a.averageRating).slice(0, 3)))
+    .catch((error) => res.status(400).json({ error }));
 }
 
 exports.getOneBook = (req, res, next) => {
