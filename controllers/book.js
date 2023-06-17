@@ -5,6 +5,10 @@ exports.creatingBook = (req, res, next) => {
   const objectBook = JSON.parse(req.body.book);
   delete objectBook._id;
   delete objectBook._userId;
+  if (!objectBook.ratings[0].grade) {
+    objectBook.ratings = [];
+    objectBook.averageRating = 0;
+  }
   const book = new Book({
     ...objectBook,
     userId: req.auth.userId,
