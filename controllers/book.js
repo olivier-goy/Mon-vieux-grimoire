@@ -22,6 +22,25 @@ exports.creatingBook = (req, res, next) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
+exports.creatingRating = (req, res, next) => { 
+  Book.findOne({ _id: req.params.id })
+    .then((book) => { 
+      console.log(book)
+    //   const rating = new book({
+    //     _ratings: [{
+    //       userId: req.auth.userId,
+    //       grade: req.body.rating
+    // }]
+    //   })
+    //   rating
+    //     .save()
+    //     .then(() => res.status(200).json({ message: "Note enregistré !" }))
+    //     .catch((error) => res.status(404).json({ error }));
+    })
+    .catch((error) => res.status(500).json({ error }));
+}
+
+
 exports.modifyBook = (req, res, next) => {
   const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
