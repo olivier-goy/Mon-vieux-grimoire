@@ -38,7 +38,7 @@ exports.creatingRating = (req, res, next) => {
         .then((book) => res.status(200).json(book))
         .catch((error) => res.status(404).json({ error }));
     })
-    .catch((book) => res.status(500).json(book));
+    .catch((error) => res.status(500).json(error));
 };
 
 exports.modifyBook = (req, res, next) => {
@@ -98,7 +98,7 @@ exports.getBestBooks = (req, res, next) => {
 
 exports.getOneBook = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
-    .then((books) => res.status(200).json(books))
+    .then((book) => res.status(200).json(book))
     .catch((error) => res.status(400).json({ error }));
 };
 
