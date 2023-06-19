@@ -18,25 +18,30 @@ exports.creatingBook = (req, res, next) => {
   });
   book
     .save()
-    .then(() => res.status(200).json({ message: "livre enregistré !" }))
-    .catch((error) => res.status(404).json({ error }));
+    .then(() => res.status(201).json({ message: "livre enregistré !" }))
+    .catch((error) => res.status(400).json({ error }));
 };
 
 exports.creatingRating = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then((book) => {
+      if (req.auth.userId === book.ratings.userId) {
+        res.status(401).json({ message:  "Unauthorized"})
+      } else {
+        const rating = {
+          userId: req.body.userId,
+          grade: req.body.rating
+        }
+  
+        book.ratings.push(rating);
 
-      const rating = {
-        userId: req.body.userId,
-        grade: req.body.rating
+        book.averageRating = Math.round(book.ratings.reduce((a, b) => a + b.grade, 0) / book.ratings.length);
+
+        book
+          .save()
+          .then((book) => res.status(200).json(book))
+          .catch((error) => res.status(404).json({ error }));
       }
-
-      book.ratings.push(rating);
-
-      book
-        .save()
-        .then((book) => res.status(200).json(book))
-        .catch((error) => res.status(404).json({ error }));
     })
     .catch((error) => res.status(500).json(error));
 };
@@ -52,7 +57,7 @@ exports.modifyBook = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (book.userId != req.auth.userId) {
-        res.status(401).json({ message: "Not authorized" });
+        res.status(401).json({ message: "Unauthorized" });
       } else {
         Book.updateOne(
           { _id: req.params.id },
@@ -69,7 +74,7 @@ exports.deleteBook = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (book.userId != req.auth.userId) {
-        res.status(403).json({ message: "Not authorized" });
+        res.status(403).json({ message: "Unauthorized" });
       } else {
         const filename = book.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
@@ -85,9 +90,7 @@ exports.deleteBook = (req, res, next) => {
 exports.getBestBooks = (req, res, next) => {
   Book.find()
     .then((books) =>
-      res
-        .status(200)
-        .json(
+      res.status(200).json(
           [...books]
             .sort((a, b) => b.averageRating - a.averageRating)
             .slice(0, 3)
