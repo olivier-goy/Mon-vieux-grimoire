@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 
-const userRoute = require("./routes/user");
+const userRoutes = require("./routes/user");
 const bookRoutes = require("./routes/book");
 
 mongoose.connect("mongodb+srv://Olivier:Olivier.@atlascluster.2c8xmmi.mongodb.net/?retryWrites=true&w=majority",
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/auth", userRoute);
+app.use("/api/auth", userRoutes);
 app.use("/api/books", bookRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
