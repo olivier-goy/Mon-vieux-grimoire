@@ -9,13 +9,12 @@ exports.creatingBook = (req, res, next) => {
     objectBook.ratings = [];
     objectBook.averageRating = 0;
   }
+
   const book = new Book({
     ...objectBook,
     userId: req.auth.userId,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`,
-  });
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  })
   book
     .save()
     .then(() => res.status(201).json({ message: "livre enregistré !" }))
