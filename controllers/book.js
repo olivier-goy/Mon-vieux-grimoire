@@ -44,20 +44,20 @@ exports.creatingRating = (req, res, next) => {
 };
 
 exports.modifyBook = (req, res, next) => {
-  const bookObject = req.file
-    ? {
+  const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
-      }
-    : { ...req.body };
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  } : { ...req.body };
   delete bookObject._userId;
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (book.userId != req.auth.userId) {
         res.status(401).json({ message: "Unauthorized" });
       } else {
+        if (req.file) {
+          const filename = book.imageUrl.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {})
+        }
         Book.updateOne(
           { _id: req.params.id },
           { ...bookObject, _id: req.params.id }
