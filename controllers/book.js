@@ -9,12 +9,11 @@ exports.creatingBook = (req, res, next) => {
     objectBook.ratings = [];
     objectBook.averageRating = 0;
   }
-
   const book = new Book({
     ...objectBook,
     userId: req.auth.userId,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
-  })
+  });
   book
     .save()
     .then(() => res.status(201).json({ message: "livre enregistré !" }))
@@ -25,17 +24,16 @@ exports.creatingRating = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (req.auth.userId === book.ratings.userId) {
-        res.status(401).json({ message:  "Unauthorized"})
+        res.status(401).json({ message: "Unauthorized" });
       } else {
         const rating = {
           userId: req.body.userId,
-          grade: req.body.rating
-        }
-  
+          grade: req.body.rating,
+        };
         book.ratings.push(rating);
-
-        book.averageRating = Math.round(book.ratings.reduce((a, b) => a + b.grade, 0) / book.ratings.length);
-
+        book.averageRating = Math.round(
+          book.ratings.reduce((a, b) => a + b.grade, 0) / book.ratings.length
+        );
         book
           .save()
           .then((book) => res.status(200).json(book))
@@ -46,12 +44,14 @@ exports.creatingRating = (req, res, next) => {
 };
 
 exports.modifyBook = (req, res, next) => {
-  const bookObject = req.file ? {
+  const bookObject = req.file
+    ? {
         ...JSON.parse(req.body.book),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
-      } : { ...req.body };
+      }
+    : { ...req.body };
   delete bookObject._userId;
   Book.findOne({ _id: req.params.id })
     .then((book) => {
@@ -89,7 +89,9 @@ exports.deleteBook = (req, res, next) => {
 exports.getBestBooks = (req, res, next) => {
   Book.find()
     .then((books) =>
-      res.status(200).json(
+      res
+        .status(200)
+        .json(
           [...books]
             .sort((a, b) => b.averageRating - a.averageRating)
             .slice(0, 3)

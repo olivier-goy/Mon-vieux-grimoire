@@ -8,9 +8,9 @@ const storage = SharpMulter({
   },
   imageOptions: {
     resize: { with: 50 },
-    fileFormat: 'webp',
-    useTimestamp: true
-  }
+    fileFormat: "webp",
+    useTimestamp: true,
+  },
 });
 
 module.exports = multer({ storage: storage }).single("image");
