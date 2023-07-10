@@ -3,7 +3,6 @@ const SharpMulter = require("sharp-multer");
 
 const storage = SharpMulter({
   destination: (req, file, callback) => {
-    file.originalname.split(" ").join("_");
     callback(null, "images");
   },
   imageOptions: {
